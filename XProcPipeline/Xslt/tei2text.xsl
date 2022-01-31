@@ -26,7 +26,7 @@
     </xsl:template>
     
     <xsl:template match="tei:ab">
-        <xsl:apply-templates select="tei:w" />
+        <xsl:apply-templates select="tei:w | tei:reg[tei:w]" />
         <xsl:if test="position() != last()">
             <xsl:value-of select="concat($o, $o)"/>    
         </xsl:if>
