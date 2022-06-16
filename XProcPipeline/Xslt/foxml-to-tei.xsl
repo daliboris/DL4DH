@@ -11,8 +11,9 @@
   </xd:desc>
  </xd:doc>
 
+ <xsl:param name="root-directory" />
  <xsl:param name="file-name" />
- <xsl:variable name="file-path" select="concat('file:/D:/Data/Dropbox/Zavazky/DL4DH/Znackovani/Xml/Tei/Merge/', $file-name, '.xml')"/>
+ <xsl:variable name="file-path" select="concat($root-directory, $file-name, '.xml')"/>
 
  <!--
   https://stackoverflow.com/questions/8931697/xslt-stylesheet-parameters-in-imported-stylesheets/8956135
@@ -36,7 +37,7 @@
 
  <xsl:template match="or:hasPage">
   <xsl:variable name="uuid" select="substring-after(@rdf:resource, 'uuid:')"/>
-  <xsl:variable name="doc" select="doc(concat('file:/D:/Data/Dropbox/Zavazky/DL4DH/Znackovani/Xml/Tei/Merge/', $uuid, '.xml'))"/>
+  <xsl:variable name="doc" select="doc(concat($root-directory, $uuid, '.xml'))"/>
   <div>
    <pb n="{$uuid}"/>
    <xsl:copy-of select="$doc//tei:body/tei:div/*"/>

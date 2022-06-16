@@ -30,36 +30,37 @@
    <p:documentation>Obsahuje reprezentaci rozpoznaných entit ve formátu XML.</p:documentation>
   </p:output>
 
-  <p:option name="url" select="'http://lindat.mff.cuni.cz/services/nametag/api/recognize?data='">
+  <p:option name="url" select="'http://lindat.mff.cuni.cz/services/nametag/api/recognize'">
    <p:documentation>URL adresa RESTového API služby</p:documentation>
   </p:option>
 
 <!--  <p:option name="uri" select="'http://lindat.mff.cuni.cz/services/nametag/api/recognize'" />-->
+  <p:variable name="full-text" select="." />
+
+  <p:http-request href="{$url}" method="post" message="{$url}">
+   <p:documentation>
+    <section>
+     <p>Volání API služby NameTag pomocí metody<b>POST</b>. Jako vstupní parametr služby se předává prostý text.</p>
+    </section>
+   </p:documentation>
+   <p:with-input>
+    <p:inline content-type="application/x-www-form-urlencoded">data={$full-text}</p:inline>
+   </p:with-input>
+  </p:http-request>
+
+<!--
   <p:variable name="max-length" select="2600" />
   <p:variable name="plain-text" select="if(string-length(.) gt $max-length) then substring(., 1, $max-length) else ." />
   <p:variable name="text" select="encode-for-uri($plain-text)" />
 
-  <!--  <p:http-request href="{$uri}" method="POST" message="{$uri}">
-   <p:with-input>
-    <c:request >
-     <c:multipart content-type="multipart/form-data" boundary="-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-827391814405806938725830">
-      <c:body content-type="plain/text" disposition='form-data; name="data"'>TEXT</c:body>
-     </c:multipart>
-    </c:request>
-   </p:with-input>
-  </p:http-request>-->
-
-  <p:http-request href="{concat($url,$text)}">
-   <!--<p:with-option name="method" select="'POST'" />-->
+   <p:http-request href="{concat($url,'?data=',$text)}">
    <p:documentation>
     <section>
      <p>Volání API služby NameTag pomocí metody<b>GET</b>. Jako vstupní parametr služby se předává prostý text, kódovaný pro URI.</p>
     </section>
    </p:documentation>
-
-   <!--<p:with-option name="href" select="concat($url,$text)"/>-->
   </p:http-request>
-
+-->
  </p:declare-step>
 
  <p:declare-step type="dl4dh:convert-nametag-analysis-to-xml">
