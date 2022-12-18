@@ -25,6 +25,7 @@
        <item name="uuid" value="84e676e0-a796-11e9-9209-005056827e51" />
        <item name="foxml-directory-path" value="Foxml/" />
        <item name="alto-directory-path" value="Alto/" />
+       <item name="image-directory-path" value="Images/" />
       </service>
      </pre>
     </section>
@@ -42,6 +43,7 @@
          <item name="uuid" value="84e676e0-a796-11e9-9209-005056827e51" />
          <item name="foxml-directory-path" value="Foxml/" />
          <item name="alto-directory-path" value="Alto/" />
+         <item name="image-directory-path" value="Images/" />
         </service>
       </request>
       <result>
@@ -194,4 +196,76 @@
 
  </p:declare-step>
 
+ <p:declare-step type="dl4dh:get-page-images" name="get-page-images">
+  <p:input port="source" primary="true"/>
+  <p:output port="result" primary="true" serialization="map{'indent' : true()}" pipe="@final-report"/>
+  <p:output port="data" serialization="map{'indent' : true()}" sequence="true"/>
+  
+  <p:variable name="main-directory-path" select="//dl4dh:request/@main-directory-path" />
+  
+  <p:variable name="service" select="//dl4dh:request/dl4dh:service[@name='Kramerius']" />
+  
+  <p:variable name="base-url" select="$service/dl4dh:item[@name='base-url']/@value">
+   <p:documentation>URL instanace Krameria, která obsahuje požadovanou publikaci.</p:documentation>
+  </p:variable>
+
+  <p:variable name="iiif-base-url" select="$service/dl4dh:item[@name='iiif-base-url']/@value">
+   <p:documentation>URL instanace IIIF serveru Kraméria, která obsahuje obrázky jendotlivých publikací.</p:documentation>
+  </p:variable>
+
+  <p:variable name="result-directory-path" select="concat($main-directory-path, $service/dl4dh:item[@name='image-directory-path']/@value)">
+   <p:documentation>Složka, do níž se uloží stažené dokumenty. Cesta ke složce může být absolutní i relativní.</p:documentation>
+  </p:variable>
+  
+  <p:for-each name="loop">
+   <p:with-input select="/dl4dh:report/dl4dh:result/dl4dh:step[@service=$service/@name and @name='get-foxml']//dl4dh:uuid"/>
+   <p:output port="result" pipe="result@item-metadata"/>
+   <p:output port="data" primary="false" pipe="result@get-data"/>
+   
+   <p:variable name="uuid" select="string(.)"/>
+   <p:variable name="file-name" select="concat($uuid, '.jpg')" />
+   <p:variable name="saved-file-path" select="p:urify(concat($result-directory-path, $file-name))"/>
+
+   <p:variable name="file-name-sequence" select="concat($uuid, '_', format-number(p:iteration-position(), '00000'), '.jpg')" />
+   <p:variable name="saved-file-path-sequence" select="p:urify(concat($result-directory-path, $file-name-sequence))"/>
+   
+   <p:variable name="url" select="concat($iiif-base-url, 'uuid:', $uuid, '/full/max/0/default.jpg')" />
+   
+   <p:http-request href="{$url}" name="get-data" /> <!-- message="Downloading {$url}" -->
+   
+   <p:if test="$result-directory-path">
+    <!--<p:store href="{$saved-file-path}" />-->
+    <p:store href="{$saved-file-path-sequence}" /> 
+   </p:if>
+   
+   <!-- href="{$saved-file-path}" -->
+   <p:identity name="item-metadata">
+    <p:with-input>
+     <dl4dh:item uuid="{$uuid}" filename="{$file-name}" type="jpeg"/>
+    </p:with-input>
+   </p:identity>
+   
+  </p:for-each>
+  
+  <p:identity name="data">
+   <p:with-input port="source" pipe="data@loop" />
+  </p:identity>
+  
+  <p:wrap-sequence wrapper="dl4dh:step">
+   <p:with-input port="source" pipe="result@loop" />
+  </p:wrap-sequence>
+  <p:set-attributes match="/*" attributes="map{
+   'service' : $service/@name, 
+   'name' :  'get-page-images', 
+   'result-directory-path' : $result-directory-path 
+   }" />
+  
+  <p:identity name="metadata" />
+  
+  <p:insert match="dl4dh:report/dl4dh:result" position="last-child" name="final-report">
+   <p:with-input port="source" pipe="source@get-page-images"/>
+   <p:with-input port="insertion" pipe="@metadata"/>
+  </p:insert>
+  
+ </p:declare-step>
 </p:library>

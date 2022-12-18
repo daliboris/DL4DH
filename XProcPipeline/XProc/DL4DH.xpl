@@ -18,11 +18,15 @@
      main-directory-path="file:/D:/Temp/DL4DH/XProc/Xml/"> <!-- TODO: nastavit složku, do níž se ukládají (mezi)výsledky  -->
      <service name="Kramerius">
       <item name="base-url" value="https://dnnt.mzk.cz/search/api/v5.0/item/" />
+      <item name="iiif-base-url" value="https://kramerius.mzk.cz/search/iiif/" />
       <!--<item name="uuid" value="84e676e0-a796-11e9-9209-005056827e51" />--> <!-- (Vznik a uznání Československého státu, 1926) -->
-      <item name="uuid" value="bd3b89f0-1396-11eb-a4cf-005056827e52" /> <!-- (Protokol ... veřejné schůze bratrstva sv. Michala v Praze dne, 1898); ve FOXML neexistují odkazy na ALTO -->
+      <!--<item name="uuid" value="bd3b89f0-1396-11eb-a4cf-005056827e52" />--> <!-- (Protokol ... veřejné schůze bratrstva sv. Michala v Praze dne, 1898); ve FOXML neexistují odkazy na ALTO -->
       <!--<item name="uuid" value="3c4c3540-3130-11ea-b0e3-005056827e52" />--> <!-- Washingtonská deklarace -->
+      <!--<item name="uuid" value="d4ef8f90-8d81-11ec-b29b-005056827e52" />-->
+      <item name="uuid" value="3bbb6570-8c77-11e2-a920-005056827e51" /> <!-- Böhmische Grammatik für deutsche Mittelschulen und Lehrerbildungs-Anstalten -->
       <item name="foxml-directory-path" value="Foxml/" />
       <item name="alto-directory-path" value="Alto/" />
+      <item name="image-directory-path" value="Images/" />
      </service>
      <service name="Alto">
       <item name="tei-directory-path"  value="Tei/Xml/"  />
@@ -61,13 +65,17 @@
  <p:variable name="debug" select="dl4dh:report/dl4dh:request/@debug" />
 
  <dl4dh:get-foxml name="get-foxml" p:message="get-foxml"/>
+ 
+ <dl4dh:get-page-images name="get-page-images" p:message="get-images"/>
+ 
+ <p:store href="{$report-directory-path}report.xml" message="Storing {$report-directory-path}report.xml" serialization="map{'indent' : true()}"/>
+ 
 
  <p:store href="{$report-directory-path}report.xml" message="Storing {$report-directory-path}report.xml" serialization="map{'indent' : true()}"/>
 
  <dl4dh:get-alto-pages name="get-alto-pages" p:message="get-alto-pages"/>
 
  <p:store href="{$report-directory-path}report-alto.xml" message="Storing {$report-directory-path}report-alto.xml" serialization="map{'indent' : true()}" />
-
 
  <dl4dh:convert-alto-items-to-tei name="convert-alto-items-to-tei"/>
 
