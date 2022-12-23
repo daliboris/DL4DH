@@ -15,6 +15,7 @@ Nástroje vznikly v rámci projektu DL4DH – VÝVOJ NÁSTROJŮ PRO EFEKTIVNĚJ�
 ## Aplikace zatím umí: 
 
 - stáhnout pomocí API Krameria dokument FOXML, 
+- stáhnout pomocí API Krameria jednotlivé strany publikace ve formátu JPEG,
 - stáhnout pomocí API Krameria jednotlivé strany publikace ve formátu ALTO,
 - převést ALTO na TEI (s vyznačením textových úseků a odpovídajících zón na obrázku),
 - převést předchozí TEI na prostý texty (kvůli volání služeb NameTag a UDPipe),
@@ -44,6 +45,7 @@ Nastavení se (zatím) provádí v souboru **DL4DH.xpl** v rámci elementu `<p:i
    <!-- TODO: nastavit @value UUID dokumentu, který se má zpracovat -->
   <item name="foxml-directory-path" value="Foxml/" />
   <item name="alto-directory-path" value="Alto/" />
+  <item name="image-directory-path" value="Images/" />  
   </service>
   ...
 </request>  
