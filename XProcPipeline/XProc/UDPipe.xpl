@@ -52,22 +52,6 @@
    <p:documentation>Obsahuje morfologickou anotaci vstupního textu ve formátu JSON.</p:documentation>
   </p:output>
 
-  <!-- <p:variable name="lines" select="tokenize(., '\n')">
-   <p:documentation>Rozdělení textu na řády, de facto odstavce.</p:documentation>
-  </p:variable>
-   
-  <p:for-each>
-   <p:with-input select="$lines" />
-   <p:output pipe="result@request"/>
-   <p:variable name="text" select="encode-for-uri(.)" />
-   <p:http-request 
-    name="request"
-    message="Downloading UDPipe"
-    href="{concat($url,$text)}"
-    parameters="map{ 'override-content-type' : 'application/json' }" />
-   
-  </p:for-each>-->
-
   <p:variable name="full-text" select="." />
   
   <p:http-request message="Downloading UDPipe" href="{$url}" parameters="map { 'override-content-type' : 'application/json' }" method="post">
@@ -76,17 +60,6 @@
     <p:inline content-type="application/x-www-form-urlencoded">tokenizer&amp;tagger&amp;parser&amp;data={$full-text}</p:inline>
    </p:with-input>
   </p:http-request>
-
-  <!--
-  <p:variable name="max-length" select="2600" />
-  <p:variable name="plain-text" select="if(string-length(.) gt $max-length) then substring(., 1, $max-length) else ." />
-  <p:variable name="text" select="encode-for-uri($plain-text)" />
-
-   
-   <p:http-request message="Downloading UDPipe" href="{concat($url,'?tokenizer&amp;tagger&amp;parser&amp;data=',$text)}"  parameters="map{ 'override-content-type' : 'application/json' }">
-   <p:documentation>Volání API služby <b>UDPipe</b> pomocí metody<b>GET</b>. Jako vstupní parametr služby se předává prostý text, kódovaný pro URI.</p:documentation>
-  </p:http-request>-->
-
  </p:declare-step>
 
  <p:declare-step type="dl4dh:get-udpipe-analyses" version="3.0" name="get-udpipe-analyses">

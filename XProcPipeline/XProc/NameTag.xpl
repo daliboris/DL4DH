@@ -47,20 +47,6 @@
     <p:inline content-type="application/x-www-form-urlencoded">data={$full-text}</p:inline>
    </p:with-input>
   </p:http-request>
-
-<!--
-  <p:variable name="max-length" select="2600" />
-  <p:variable name="plain-text" select="if(string-length(.) gt $max-length) then substring(., 1, $max-length) else ." />
-  <p:variable name="text" select="encode-for-uri($plain-text)" />
-
-   <p:http-request href="{concat($url,'?data=',$text)}">
-   <p:documentation>
-    <section>
-     <p>Volání API služby NameTag pomocí metody<b>GET</b>. Jako vstupní parametr služby se předává prostý text, kódovaný pro URI.</p>
-    </section>
-   </p:documentation>
-  </p:http-request>
--->
  </p:declare-step>
 
  <p:declare-step type="dl4dh:convert-nametag-analysis-to-xml">
