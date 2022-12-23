@@ -65,13 +65,13 @@
 
  <p:declare-step type="dl4dh:convert-nametag-analysis-to-xml">
 
-  <p:input port="source" content-types="application/json" />
   <p:output port="result" content-types="application/xml" />
+  <p:input port="source" content-types="application/json" />
   
-  <p:variable name="model" select="normalize-space(?model)" />
+  <p:variable name="model" select="normalize-space(.?model)" />
 
   <p:cast-content-type content-type="application/xml">
-   <p:with-input port="source" select="?result" />
+   <p:with-input port="source" select=".?result" />
   </p:cast-content-type>
 
   <p:xslt version="3.0">
